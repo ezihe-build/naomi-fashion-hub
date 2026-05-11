@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, Suspense } from 'react';
+import { 
+  Canvas 
+} from '@react-three/fiber';
+import { 
+  useFBX, OrbitControls, Stage 
+} from '@react-three/drei';
 import {
   X, Save, Undo2, Redo2, Camera, ShoppingBag, Heart, User,
   Shirt, Footprints, Glasses, Watch, Backpack, Palette,
@@ -12,6 +18,13 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 function cn(...inputs: ClassValue[]) { return twMerge(clsx(inputs)); }
+
+// --- ADD THIS COMPONENT HERE ---
+function AvatarModel() {
+  const fbx = useFBX('/models/model.fbx');
+  return <primitive object={fbx} scale={0.005} />;
+}
+// -------------------------------
 
 const COLOR_SWATCHES = [
   { id:'skin-1', hex:'#f5d0b5', label:'Light' },
@@ -562,18 +575,25 @@ export default function NaomiFashionHub() {
           )}
         </AnimatePresence>
 
-        <div className="absolute inset-0 z-10 flex items-center justify-center">
-          {!isIframeReady && (
-            <div className="absolute inset-0 flex items-center justify-center z-20">
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin" />
-                <p className="text-sm text-naomi-muted">Loading Avatar Studio...</p>
-              </div>
-            </div>
-          )}
-          <iframe ref={iframeRef} src="https://demo.readyplayer.me/avatar?frameApi&clearCache"
-            className="w-full h-full max-w-md rpm-iframe" allow="camera *; microphone *" title="Ready Player Me Avatar Creator" />
-        </div>
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#1a1a1a]">
+  <Suspense fallback={
+    <div className="flex flex-col items-center gap-3 z-20">
+      <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+      <p className="text-sm text-white/60">Loading 3D Model...</p>
+    </div>
+  }>
+    <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 150], fov: 50 }}>
+      <Stage environment="city" intensity={0.5} adjustCamera={true}>
+        <AvatarModel />
+      </Stage>
+      <OrbitControls 
+        enablePan={false} 
+        minPolarAngle={Math.PI / 2.2} 
+        maxPolarAngle={Math.PI / 2} 
+      />
+    </Canvas>
+  </Suspense>
+</div>
 
         {/* Undo / Redo */}
         <div className="absolute bottom-4 left-4 z-30 flex gap-3">
