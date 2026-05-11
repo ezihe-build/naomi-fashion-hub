@@ -577,24 +577,26 @@ export default function NaomiFashionHub() {
         </AnimatePresence>
 
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#1a1a1a]">
-  <Suspense fallback={
-    <div className="flex flex-col items-center gap-3 z-20">
-      <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
-      <p className="text-sm text-white/60">Loading 3D Model...</p>
-    </div>
-  }>
-    <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 150], fov: 50 }}>
-      <Stage environment="city" intensity={0.5} adjustCamera={true}>
-        <AvatarModel />
-      </Stage>
-      <OrbitControls 
-        enablePan={false} 
-        minPolarAngle={Math.PI / 2.2} 
-        maxPolarAngle={Math.PI / 2} 
-      />
-    </Canvas>
-  </Suspense>
-</div>
+  {typeof window !== 'undefined' && (
+    <Suspense fallback={
+      <div className="flex flex-col items-center gap-3 z-20">
+        <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+        <p className="text-sm text-white/60">Loading 3D Model...</p>
+      </div>
+    }>
+      <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 150], fov: 50 }}>
+        <Stage environment="city" intensity={0.5} adjustCamera={true}>
+          <AvatarModel />
+        </Stage>
+        <OrbitControls 
+          enablePan={false} 
+          minPolarAngle={Math.PI / 2.2} 
+          maxPolarAngle={Math.PI / 2} 
+        />
+      </Canvas>
+    </Suspense>
+  )}
+</div> 
 
         {/* Undo / Redo */}
         <div className="absolute bottom-4 left-4 z-30 flex gap-3">
