@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   X, Save, Undo2, Redo2, Camera, ShoppingBag, Heart, User,
-  Shirt, Footprints, Glasses, Hat, Watch, Backpack, Palette,
+  Shirt, Footprints, Glasses, Watch, Backpack, Palette,
   Sparkles, Check, Gem, Crown, Clock,
   Star, TrendingUp, Zap, Award, Briefcase, Flag, Filter
 } from 'lucide-react';
